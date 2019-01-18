@@ -1,0 +1,57 @@
+* {
+  box-sizing: border-box;	
+}
+
+#calculator {
+	border: 1px solid black;
+	width: 400px;
+	height: 600px;
+	margin: auto;
+	margin-top: 50px;
+	padding: 10px;
+	border-radius: 10px;
+	background-color: #242424;
+}
+
+#calculator, #screen, #container, button {
+	border-radius: 10px;
+}
+
+#container {
+  border: 1px solid black;
+	height: 430px;
+	padding: 8px;
+	display: grid;
+	grid-template-columns: auto auto auto auto;
+	background-color: #f5f5f5;
+}
+
+#screen {
+	border: 1px solid black;
+	height: 100px;
+	margin-bottom: 10px;
+	background-color: #dddf9e;
+}
+
+#header {
+	text-align: center;
+	margin-bottom: 10px;
+	font-weight: bold;
+	font-size: 24px;
+	color: white;
+}
+
+button {
+	background-color: #242424;
+	color: white;
+	font-size: 24px;
+}
+
+#m_plus, #mr, #mc, #c {
+	background-color: #007c33;
+}
+
+#division, #multiply, #minus, #plus, #result {
+	background-color: #fa4108;
+}
+
