@@ -1,9 +1,14 @@
 "use strict";
 const calculator = document.getElementById('calculator');
-const mainScreen = document.getElementById('main_screen');
-const actionsScreen = document.getElementById('actions_screen');
+const screen = document.getElementById('screen');
+//const actionsScreen = document.getElementById('actions_screen');
 let memory = null;
 let backspaceIsAllowed = true;
+let result = '0';
+let a = '0';
+let b = null;
+let action;
+screen.textContent = result;
 
 calculator.addEventListener('click', function(e) {
 	switch(e.target.id) {
@@ -18,73 +23,112 @@ calculator.addEventListener('click', function(e) {
     	case '8':
     	case '9':
 	    	backspaceIsAllowed = true;
-	    	if (mainScreen.textContent == '0') {
-	    		mainScreen.textContent = e.target.id;
-	    	} else if (mainScreen.textContent.length < 12) {
-	    		mainScreen.textContent += e.target.id;
-	    	} else if (mainScreen.textContent.length == 12 && 
-			    	  (mainScreen.textContent[0] == '-' || mainScreen.textContent.indexOf('.') != -1) ) {
-	    		mainScreen.textContent += e.target.id;
-	    	} else if (mainScreen.textContent.length == 13 && 
-	    		       mainScreen.textContent[0] == '-' && mainScreen.textContent.indexOf('.') != -1) {
-                mainScreen.textContent += e.target.id;
+	    	if (screen.textContent == '0') {
+	    		screen.textContent = result = e.target.id;
+	    		console.log(result);
+	    	} else if (screen.textContent.length < 12) {
+	    		screen.textContent = result += e.target.id;
+	    		console.log(result);
+	    	} else if (screen.textContent.length == 12 && 
+			    	  (screen.textContent[0] == '-' || screen.textContent.indexOf('.') != -1) ) {
+	    		screen.textContent = result += e.target.id;
+	    		console.log(result);
+	    	} else if (screen.textContent.length == 13 && 
+	    		       screen.textContent[0] == '-' && screen.textContent.indexOf('.') != -1) {
+                screen.textContent = result += e.target.id;
+                console.log(result);
 	    	}
 	    	break;
 	    case 'dot':
 		    backspaceIsAllowed = true;
-		    if (mainScreen.textContent.indexOf('.') == -1) mainScreen.textContent += '.';
+		    if (screen.textContent.indexOf('.') == -1) {
+		    	screen.textContent = result += '.';
+		    }
+		    console.log(result);
 		    break;
 	    case 'sign':
 		    backspaceIsAllowed = true;
-		    if (mainScreen.textContent != '0' && mainScreen.textContent[0] != '-') {
+		    if (screen.textContent != '0' && screen.textContent[0] != '-') {
 		    	//if (mainScreen.textContent.length >= 12) mainScreen.style.fontSize = '56px';
-		    	mainScreen.textContent = '-' + mainScreen.textContent;
-		    } else if (mainScreen.textContent != '0' && mainScreen.textContent[0] == '-') {
+		    	screen.textContent = result = '-' + result;
+		    } else if (screen.textContent != '0' && screen.textContent[0] == '-') {
 		    	//if (mainScreen.textContent.length > 12) mainScreen.style.fontSize = '58px';
-				mainScreen.textContent = mainScreen.textContent.slice(1);
-		    }
+				screen.textContent = result = result.slice(1);
+			}
+		    console.log(result);
 		    break;
 	    case 'backspace':
 		    if (backspaceIsAllowed == true) {
-			    if (mainScreen.textContent.length == 1 || (mainScreen.textContent.length == 2 && mainScreen.textContent[0] == '-') ) {
-			    	mainScreen.textContent = 0;
+			    if (screen.textContent.length == 1 || (screen.textContent.length == 2 && screen.textContent[0] == '-') ) {
+			    	screen.textContent = result = 0;
 			    } else {
-				    mainScreen.textContent = mainScreen.textContent.slice(0, mainScreen.textContent.length - 1);
+				    screen.textContent = result = result.slice(0, result.length - 1);
 			    }
-			    if (mainScreen.textContent.length > 12) mainScreen.style.fontSize = '58px';
+			    if (screen.textContent.length > 12) screen.style.fontSize = '58px';
 		    }
+		    console.log(result);
 		    break;
 	    case 'c':
 		    backspaceIsAllowed = true;
-		    mainScreen.textContent = 0;
-		    actionsScreen.textContent = '';
+		    screen.textContent = result = 0;
+		    a = 0;
+		    //actionsScreen.textContent = '';
 		    break;
 	    case 'm_plus':
 		    backspaceIsAllowed = false;
-		    memory = +mainScreen.textContent;
+		    memory = +screen.textContent;
 		    break;
 	    case 'mr':
 		    backspaceIsAllowed = false;
-		    mainScreen.textContent = memory;
+		    screen.textContent = result = memory;
+		    console.log(result);
 		    break;
 	    case 'root':
 		    backspaceIsAllowed = false;
-		    actionsScreen.textContent = `sqrt(${mainScreen.textContent})`;
-		    mainScreen.textContent = root(mainScreen.textContent);
-		    if (mainScreen.textContent >= 0.99999999999 && mainScreen.textContent <= 1.00000000001) mainScreen.textContent = 1;
+		    /*if (actionsScreen.textContent == '') {
+			    actionsScreen.textContent = `sqrt(${mainScreen.textContent})`;
+		    } else {
+		    	actionsScreen.textContent = `sqrt(${mainScreen.textContent})`;
+		    }*/
+		    result = '' + root(screen.textContent);
+		    if (result >= 0.99999999999 && result <= 1.00000000001) {
+		    	screen.textContent = result = 1;
+		    	break;
+	    	}
+		    if (result.length > 13) {
+		    	//console.log(result.substr(0, 13));
+		    	screen.textContent = result.substr(0, 13);
+		    } else {
+		    	screen.textContent = result;
+		    }
+
+		    //if (result >= 0.99999999999 && result <= 1.00000000001) screen.textContent = result = 1;
+		    console.log(result);
 		    break;
 	    case 'fraction':
 		    backspaceIsAllowed = false;
-		    actionsScreen.textContent = `fraction(${mainScreen.textContent})`;
-		    mainScreen.textContent = fraction(mainScreen.textContent);
+		    //actionsScreen.textContent = `fraction(${mainScreen.textContent})`;
+		    result = '' + fraction(result);
+		    if (result.length > 13) {
+		    	//console.log(result.substr(0, 13));
+		    	screen.textContent = result.substr(0, 13);
+		    } else {
+		    	screen.textContent = result;
+		    }
+		    console.log(result);
 		    break;
+	    case 'plus':
+		    if (b == null) {
+		    	action = sum;
+		    }
+
 
     }
 
-    if (mainScreen.textContent.length > 12) {
-		mainScreen.style.fontSize = '54px';
+    if (screen.textContent.length > 12) {
+		screen.style.fontSize = '54px';
 	} else {
-		mainScreen.style.fontSize = '58px';
+		screen.style.fontSize = '58px';
 	}
 
 });

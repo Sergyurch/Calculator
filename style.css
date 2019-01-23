@@ -32,20 +32,23 @@
 	margin-bottom: 10px;
 	background-color: #dddf9e;
 	padding: 6px;
+	text-align: right;
+	font-size: 58px;
+	line-height: 120px;
+	overflow: hidden;
 }
 
-#main_screen {
+/*#main_screen {
 	text-align: right;
 	font-size: 58px;
 	height: 60px;
 	line-height: 60px;
 	overflow: hidden;
-}
+}*/
 
-#actions_screen {
-	height: 28px;
+/*	height: 28px;
 	text-align: right;
-}
+}*/
 
 #header {
 	text-align: center;
