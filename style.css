@@ -71,6 +71,6 @@ button:focus {
 	background-color: #007c33;
 }
 
-#fraction, #percent, #root, #division, #multiply, #minus, #plus, #result {
+#fraction, #percent, #root, #divide, #multiply, #subtract, #sum, #result {
 	background-color: #fa4108;
 }
