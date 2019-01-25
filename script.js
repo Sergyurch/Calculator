@@ -1,15 +1,18 @@
 "use strict";
 const calculator = document.getElementById('calculator');
 const screen = document.getElementById('screen');
-//const actionsScreen = document.getElementById('actions_screen');
 let memory = '0';
 let backspaceIsAllowed = true;
 let result = '0';
 let a = '0';
 let b = null;
+let b2 = null;
 let action = null;
 let cleanScreen = true;
+let firstPress = true;
 screen.textContent = result;
+document.onkeydown = (e) => console.log(e.key);
+
 
 calculator.addEventListener('click', function(e) {
 	switch(e.target.id) {
@@ -24,7 +27,9 @@ calculator.addEventListener('click', function(e) {
     	case '8':
     	case '9':
 	    	backspaceIsAllowed = true;
-	    	if (cleanScreen == true) {
+	    	//b2 = null;
+
+	    	if (cleanScreen == true || screen.textContent == '0') {
 	    		screen.textContent = result = e.target.id;
 	    		cleanScreen = false;
 	    		console.log(result);
@@ -40,19 +45,38 @@ calculator.addEventListener('click', function(e) {
                 screen.textContent = result += e.target.id;
                 console.log(result);
 	    	}
+
+	    	/*if ( (action == null) || (b2 != null) ) {
+	    		a = result;
+	    	} else {
+	    		b = result;
+	    	}*/
+	    	console.log(a);
+	    	console.log(b);
+
 	    	break;
 	    case 'dot':
 		    backspaceIsAllowed = true;
+		    //b2 = null;
+
 		    if (cleanScreen == true) {
 		    	screen.textContent = result = '0.'
     			cleanScreen = false;
     		} else if (screen.textContent.indexOf('.') == -1) {
 		    	screen.textContent = result += '.';
 		    }
+
+		    /*if ( (action == null) || (b2 != null) ) {
+	    		a = result;
+	    	} else {
+	    		b = result;
+	    	}*/
+
 		    console.log(result);
 		    break;
 	    case 'sign':
 		    backspaceIsAllowed = true;
+
 		    if (screen.textContent != '0' && screen.textContent[0] != '-') {
 		    	//if (mainScreen.textContent.length >= 12) mainScreen.style.fontSize = '56px';
 		    	screen.textContent = result = '-' + result;
@@ -60,6 +84,13 @@ calculator.addEventListener('click', function(e) {
 		    	//if (mainScreen.textContent.length > 12) mainScreen.style.fontSize = '58px';
 				screen.textContent = result = (result + '').slice(1);
 			}
+
+			/*if ( (action == null) || (b2 != null) ) {
+	    		a = result;
+	    	} else {
+	    		b = result;
+	    	}*/
+
 		    console.log(result);
 		    break;
 	    case 'backspace':
@@ -70,6 +101,11 @@ calculator.addEventListener('click', function(e) {
 				    screen.textContent = result = (result + '').slice(0, result.length - 1);
 			    }
 			    //if (screen.textContent.length > 12) screen.style.fontSize = '58px';
+			    /*if (action == null) {
+		    		a = result;
+		    	} else {
+		    		b = result;
+		    	}*/
 		    }
 		    console.log(result);
 		    break;
@@ -78,6 +114,7 @@ calculator.addEventListener('click', function(e) {
 		    screen.textContent = result = '0';
 		    a = '0';
 		    b = null;
+		    b2 = null;
 		    action = null;
 		    cleanScreen = true;
 		    //actionsScreen.textContent = '';
@@ -91,6 +128,13 @@ calculator.addEventListener('click', function(e) {
 		    backspaceIsAllowed = false;
 		    screen.textContent = result = memory;
 		    cleanScreen = true;
+
+		    /*if ( (action == null) || (b2 != null) ) {
+		    		a = result;
+		    	} else {
+		    		b = result;
+		    	}*/
+
 		    console.log(result);
 		    break;
 	    case 'root':
@@ -113,6 +157,12 @@ calculator.addEventListener('click', function(e) {
 		    	screen.textContent = result;
 		    }
 
+		    /*if ( (action == null) || (b2 != null) ) {
+	    		a = result;
+	    	} else {
+	    		b = result;
+	    	}*/
+
 		    //if (result >= 0.99999999999 && result <= 1.00000000001) screen.textContent = result = 1;
 		    console.log(result);
 		    break;
@@ -127,32 +177,81 @@ calculator.addEventListener('click', function(e) {
 		    } else {
 		    	screen.textContent = result;
 		    }*/
+		    /*if ( (action == null) || (b2 != null) ) {
+	    		a = result;
+	    	} else {
+	    		b = result;
+	    	}*/
+
 		    console.log(result);
 		    break;
 	    case 'sum':
 	    case 'subtract':
 	    case 'multiply':
 	    case 'divide':
-		    if (action == null) {
+		    /*if (action == null || firstPress == false) {
 		    	a = result;
+		    	firstPress = true;
 		    } else {
 		    	b = result;
 		    	screen.textContent = a = result = action(+a, +b);
+		    }*/
+		    if (b != null) {
+		    	screen.textContent = /*a =*/ result = action(+a, +b);
+		    	b = null;
 		    }
-		    action = () => (e.target.id == 'sum') ? sum(+a, +b): 
-						   (e.target.id == 'subtract') ? subtract(+a, +b): 
-						   (e.target.id == 'multiply') ? multiply(+a, +b): divide(+a, +b);
+		    action = (e.target.id == 'sum') ? sum: 
+					 (e.target.id == 'subtract') ? subtract: 
+					 (e.target.id == 'multiply') ? multiply: divide;
+		    b2 = null;
 		    backspaceIsAllowed = false;
 	    	cleanScreen = true;
+	    	console.log(action);
 	    	break;
 	    case 'percent':
-
+		    backspaceIsAllowed = false;
+		    cleanScreen = true;
+		    if (action == null) {
+		    	screen.textContent = /*a =*/ result = '0';
+		    	break;
+		    } 
+		    screen.textContent = result = '' + ( +a * +screen.textContent/100 );
+		    /*if ( (action == null) || (b2 != null) ) {
+	    		a = result;
+	    	} else {
+	    		b = result;
+	    	}*/
+		    break;
     	case 'result':
+	    	/*console.log(a);
+	    	if (firstPress == true) {
+	    		b = result;
+	    		firstPress = false;
+	    	}
 	    	if (action != null && b != null) screen.textContent = a = result = action(+a, +b);
 	    	backspaceIsAllowed = false;
-	    	cleanScreen = true;
+	    	cleanScreen = true;*/
 	    	//action = null;
+	    	if (action != null) {
+	    		//console.log('kyky');
+	    		if (b2 == null) {
+	    			b2 = screen.textContent;
+	    			b = null;
+	    			//console.log(typeof b2);
+	    		}
+	    		
+	    		screen.textContent = /*a =*/ result = action(+a, +b2);
+	    		backspaceIsAllowed = false;
+		    	cleanScreen = true;
+	    	}
+	    	break;
 
+	}
+
+	if ( (action == null) || (b2 != null) ) {
+		a = result;
+	} else {
+		b = result;
 	}
 
     if (screen.textContent.length > 12 && screen.textContent[0] == '-' && screen.textContent.indexOf('.') != -1) {
@@ -165,6 +264,7 @@ calculator.addEventListener('click', function(e) {
     	screen.textContent = (result + '').substr(0, 13);
     	screen.style.fontSize = '58px';
     }
+    
 });
 
 function sum(a, b) {
